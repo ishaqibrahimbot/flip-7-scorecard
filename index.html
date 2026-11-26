@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Flip 7 Scorecard</title>
+  <meta name="description" content="Offline scorekeeper for Flip 7.">
+  <meta name="theme-color" content="#1b1f3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flip 7">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">7</span> Flip 7 Scorecard</div>
+    <button id="btn-new-top" class="ghost small" hidden>New game</button>
+  </header>
+
+  <main id="app">
+    <!-- Setup -->
+    <section id="screen-setup" class="screen" hidden>
+      <h1>New Scoreboard</h1>
+      <p class="muted">Enter player names separated by commas.</p>
+      <form id="setup-form" autocomplete="off">
+        <label for="names">Players</label>
+        <input id="names" name="names" type="text" placeholder="Alice, Bob, Charlie" required>
+        <label for="target">Points to win</label>
+        <input id="target" name="target" type="number" inputmode="numeric" min="1" value="200" required>
+        <p id="setup-error" class="error" hidden></p>
+        <button type="submit" class="primary block">Start game</button>
+      </form>
+    </section>
+
+    <!-- Scoreboard -->
+    <section id="screen-game" class="screen" hidden>
+      <div class="game-head">
+        <div>
+          <h1 id="round-title">Round 1</h1>
+          <p class="muted" id="target-label"></p>
+        </div>
+        <button id="btn-undo" class="ghost small" disabled>Undo round</button>
+      </div>
+      <div id="tiebreak-banner" class="banner" hidden></div>
+
+      <ol id="standings" class="standings"></ol>
+
+      <form id="round-form" class="card" autocomplete="off">
+        <h2 id="entry-title">Round 1 scores</h2>
+        <div id="round-inputs" class="round-inputs"></div>
+        <button type="submit" class="primary block">Add round</button>
+      </form>
+
+      <details class="card history" id="history-wrap">
+        <summary>Round history</summary>
+        <div class="table-scroll"><table id="history"></table></div>
+      </details>
+    </section>
+
+    <!-- Results -->
+    <section id="screen-results" class="screen" hidden>
+      <div class="winner-card">
+        <div class="trophy">🏆</div>
+        <p class="muted">Winner</p>
+        <h1 id="winner-name"></h1>
+        <p id="winner-score" class="big"></p>
+      </div>
+      <div class="stats">
+        <div><span id="stat-rounds"></span><small>Rounds</small></div>
+        <div><span id="stat-high"></span><small id="stat-high-label">Highest round</small></div>
+      </div>
+      <h2>Final standings</h2>
+      <ol id="final-standings" class="standings"></ol>
+      <details class="card history">
+        <summary>Round history</summary>
+        <div class="table-scroll"><table id="final-history"></table></div>
+      </details>
+      <div class="row-buttons">
+        <button id="btn-undo-results" class="ghost">Undo last round</button>
+        <button id="btn-rematch" class="ghost">Rematch</button>
+        <button id="btn-new-results" class="primary">New scoreboard</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Warning dialog -->
+  <dialog id="confirm-dialog">
+    <form method="dialog">
+      <h2>Warning</h2>
+      <p>Game in progress. Are you sure you want to create a new scoreboard or do you want to continue scoring?</p>
+      <div class="row-buttons">
+        <button value="continue" class="ghost">Continue Scoring</button>
+        <button value="new" class="danger">New Scoreboard</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Edit round dialog -->
+  <dialog id="edit-dialog">
+    <form method="dialog" id="edit-form">
+      <h2 id="edit-title">Edit round</h2>
+      <div id="edit-inputs" class="round-inputs"></div>
+      <div class="row-buttons">
+        <button value="cancel" class="ghost" formnovalidate>Cancel</button>
+        <button value="save" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
